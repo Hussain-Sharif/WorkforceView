@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WorkforceView</title>
+    <link rel="stylesheet" href="Static/css/styles.css">
+</head>
+<body>
+    <div id="app">
+        <header class="header">
+            <div class="header-left">
+                <h1 class="logo">WorkforceView</h1>
+                <span class="subtitle">Employee Directory</span>
+            </div>
+            <div class="header-right">
+                <button id="add-employee-btn" class="btn btn-primary">
+                    <span class="btn-icon">+</span> Add Employee
+                </button>
+                <input type="text" id="search-input" placeholder="Search by name or email..." class="search-input">
+                <button id="filter-btn" class="btn btn-secondary">Filter</button>
+                <select id="sort-select" class="sort-select">
+                    <option value="">Sort By</option>
+                    <option value="firstName">First Name</option>
+                    <option value="department">Department</option>
+                </select>
+            </div>
+        </header>
+
+        <div class="content-wrapper">
+            <!-- Left Side Filter Panel -->
+            <aside id="filter-panel" class="filter-panel hidden">
+                <div class="filter-header">
+                    <h3>Filter Employees</h3>
+                    <button id="close-filter" class="close-btn">&times;</button>
+                </div>
+                <div class="filter-content">
+                    <div class="filter-group">
+                        <label for="filter-firstName">First Name</label>
+                        <input type="text" id="filter-firstName" placeholder="Enter first name" class="filter-input">
+                    </div>
+                    <div class="filter-group">
+                        <label for="filter-department">Department</label>
+                        <input type="text" id="filter-department" placeholder="Enter department" class="filter-input">
+                    </div>
+                    <div class="filter-group">
+                        <label for="filter-role">Role</label>
+                        <input type="text" id="filter-role" placeholder="Enter role" class="filter-input">
+                    </div>
+                    <div class="filter-buttons">
+                        <button id="apply-filter-btn" class="btn btn-primary">Apply Filter</button>
+                        <button id="clear-filter-btn" class="btn btn-secondary">Clear All</button>
+                    </div>
+                </div>
+            </aside>
+
+            <main class="main-content">
+                <div class="results-info">
+                    <!-- <span id="employee-count">Loading employees...</span> -->
+                </div>
+                <div id="employee-list-container" class="employee-grid">
+                    <!-- Employee cards will be rendered here by JavaScript -->
+                </div>
+                <div id="pagination-controls" class="pagination">
+                    <!-- Pagination will be rendered here by JavaScript -->
+                </div>
+            </main>
+        </div>
+
+        <div id="form-modal" class="modal hidden">
+            <!-- Form will be rendered here by JavaScript -->
+        </div>
+    </div>
+
+    <!-- JavaScript Files -->
+    <script src="Static/js/data.js"></script>
+    <script src="Static/js/employeeManager.js"></script>
+    <script src="Static/js/uiController.js"></script>
+    <script src="Static/js/main.js"></script>
+</body>
+</html>
