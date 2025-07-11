@@ -6,23 +6,27 @@ const UIController = (() => { //it's a IIFE/Higher order funtion which returns a
     function renderList(employees) {
       const container = document.getElementById('employee-list-container');
       container.innerHTML = '';
-
-      employees.forEach(emp => {
-        const card = document.createElement('div');
-        card.className = 'employee-card';
-        card.dataset.employeeId = emp.id;
-        
-        card.innerHTML = ` 
-          <h3>${emp.firstName} ${emp.lastName}</h3>
-          <p>ID: ${emp.id}</p>
-          <p>Email: ${emp.email}</p>
-          <p>Department: ${emp.department}</p>
-          <p>Role: ${emp.role}</p>
-          <button class="edit-btn" data-id="${emp.id}">Edit</button>
-          <button class="delete-btn" data-id="${emp.id}">Delete</button>
-        `;
-        container.appendChild(card);
-      });
+      if(!employees.length) {
+        container.innerHTML = 'Click "+Add Employee" to Create Employee Cards or Remove Filters';
+      }else{
+        employees.forEach(emp => {
+            const card = document.createElement('div');
+            card.className = 'employee-card';
+            card.dataset.employeeId = emp.id;
+            
+            card.innerHTML = ` 
+              <h3>${emp.firstName} ${emp.lastName}</h3>
+              <p>ID: ${emp.id}</p>
+              <p>Email: ${emp.email}</p>
+              <p>Department: ${emp.department}</p>
+              <p>Role: ${emp.role}</p>
+              <button class="edit-btn" data-id="${emp.id}">Edit</button>
+              <button class="delete-btn" data-id="${emp.id}">Delete</button>
+            `;
+            container.appendChild(card);
+          });
+      }
+      
     }
   
     function showForm(employee = null) {
@@ -53,7 +57,7 @@ const UIController = (() => { //it's a IIFE/Higher order funtion which returns a
       const errorDiv = document.getElementById('form-errors');
       errorDiv.innerHTML = errors.map(e => `<p class="error">${e}</p>`).join('');
     }
-  
+
     return { renderList, showForm, hideForm, showErrors };
   })();
   

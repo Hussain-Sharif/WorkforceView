@@ -1,11 +1,105 @@
 
 document.addEventListener('DOMContentLoaded', () => {
     let filteredEmployees = EmployeeManager.getAll(); // Current Filtered Employee cards
+    let cardsPerPage=paginationControlLimits[0];
+    let totalPages=Math.ceil((filteredEmployees)/cardsPerPage);
+    let currentPage=1;
   
     function refreshList() {
-      UIController.renderList(filteredEmployees);
+        let renderedPageEmployeeList = filteredEmployees.filter((eachEmp, ind) => {
+            return Math.ceil((ind + 1) / cardsPerPage) == currentPage;
+        });
+        UIController.renderList(renderedPageEmployeeList);
+        showPaginationControls(); // Update pagination after rendering
     }
-  
+
+    function showPaginationControls() {
+        const pageControlDiv = document.getElementById("pagination-controls");
+        
+        // Limit selection buttons
+        const limitOptions = paginationControlLimits.map(eachLimit => (
+            `<button class="limit-btn ${cardsPerPage === eachLimit ? 'active' : ''}" 
+                     type="button" 
+                     data-limit="${eachLimit}">
+                ${eachLimit}
+            </button>`
+        )).join('');
+
+        // Page navigation buttons
+        const pageButtons = [];
+        
+        // Previous button
+        pageButtons.push(`
+            <button class="page-btn ${currentPage === 1 ? 'disabled' : ''}" 
+                    data-page="${currentPage - 1}" 
+                    ${currentPage === 1 ? 'disabled' : ''}>
+                ← Previous
+            </button>
+        `);
+
+        // Page number buttons (show max 5 pages around current)
+        const startPage = Math.max(1, currentPage - 2);
+        const endPage = Math.min(totalPages, currentPage + 2);
+        
+        for (let i = startPage; i <= endPage; i++) {
+            pageButtons.push(`
+                <button class="page-btn ${i === currentPage ? 'active' : ''}" 
+                        data-page="${i}">
+                    ${i}
+                </button>
+            `);
+        }
+
+        // Next button
+        pageButtons.push(`
+            <button class="page-btn ${currentPage === totalPages ? 'disabled' : ''}" 
+                    data-page="${currentPage + 1}" 
+                    ${currentPage === totalPages ? 'disabled' : ''}>
+                Next →
+            </button>
+        `);
+
+        pageControlDiv.innerHTML = `
+            <div class="pagination-wrapper">
+                <div class="pagination-info">
+                    <span>Showing ${(currentPage - 1) * cardsPerPage + 1} to ${Math.min(currentPage * cardsPerPage, filteredEmployees.length)} of ${filteredEmployees.length} employees</span>
+                </div>
+                <div class="pagination-limits">
+                    <span class="limit-label">Items per page:</span>
+                    ${limitOptions}
+                </div>
+                <div class="pagination-pages">
+                    ${pageButtons.join('')}
+                </div>
+            </div>
+        `;
+
+        // Add event listeners for pagination controls
+        bindPaginationEvents();
+    }
+
+    function bindPaginationEvents() {
+        // Limit buttons
+        document.querySelectorAll('.limit-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                cardsPerPage = parseInt(e.target.dataset.limit);
+                totalPages = Math.ceil(filteredEmployees.length / cardsPerPage);
+                currentPage = 1; // Reset to first page
+                refreshList();
+            });
+        });
+
+        // Page buttons
+        document.querySelectorAll('.page-btn:not(.disabled)').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                const newPage = parseInt(e.target.dataset.page);
+                if (newPage >= 1 && newPage <= totalPages) {
+                    currentPage = newPage;
+                    refreshList();
+                }
+            });
+        });
+    }
     // Initial render
     refreshList();
   
